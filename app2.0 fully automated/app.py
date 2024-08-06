@@ -11,8 +11,8 @@ from openpyxl import load_workbook
 hoje = datetime.now()
 first_day_of_this_month = hoje.replace(day=1)
 last_day_previous_month = first_day_of_this_month - timedelta(days=1)
-print(last_day_previous_month)
-print(last_day_previous_month.strftime("%d/%m/%Y"))
+#print(last_day_previous_month)
+#print(last_day_previous_month.strftime("%d/%m/%Y"))
 day=last_day_previous_month.strftime("%d")
 month=last_day_previous_month.strftime("%m")
 this_month = str(int(month)+1)
@@ -20,7 +20,6 @@ year=last_day_previous_month.strftime("%Y")
 
 def multipletabs(num):
     for i in range(num):    
-        print(i)
         pyautogui.press('tab')
         time.sleep(0.4)
 
@@ -29,6 +28,7 @@ def multipletabs(num):
 
 
 #É preciso que o maxbot esteja na tela inicial com todos os menus recolhidos
+print("Downloading files...")
 nomes = ['Guilherme Soares', 'Luciano Costa', 'Valeria Mendes']
 #print(nomes[0])
 time.sleep(1)
@@ -75,6 +75,7 @@ time.sleep(1)
 pyautogui.press('Enter')
 #Aqui já clica para baixar o relatório e abre o diretório para escolher onde salvar. 
 time.sleep(2)
+print("Guilherme`s report saved")
 #Close popup with download options
 pyautogui.press('escape')
 time.sleep(0.3)
@@ -95,6 +96,7 @@ time.sleep(3)
 pyautogui.write(f'{month}-{year}-Relatorio-de-comissao_{nomes[1]}_completo')
 time.sleep(1)
 pyautogui.press('Enter')
+print("Luciano`s report saved")
 
 
 time.sleep(2)
@@ -120,7 +122,8 @@ pyautogui.press('Enter')
 time.sleep(1)
 pyautogui.press('escape')
 time.sleep(0.3)
-print("Automation script completed successfully.")
+print("Valeria`s report saved")
+print("Data extraction completed successfully")
 
 
 #
@@ -128,6 +131,7 @@ print("Automation script completed successfully.")
 #
 #
 # Changing moving files to the correct directory
+
 hoje = datetime.now()
 first_day_of_this_month = hoje.replace(day=1)
 last_day_previous_month = first_day_of_this_month - timedelta(days=1)
@@ -139,6 +143,7 @@ this_month = hoje.strftime('%m')
 year=last_day_previous_month.strftime("%Y")
 this_year=last_day_previous_month.strftime("%Y")
 
+print("Moving files to the correct folder...")
 #Moving to the correct folder
 origem = '/Users/mateushorta/Desktop'
 def destino():
@@ -146,8 +151,10 @@ def destino():
     return(destino)
 
 #Verificando a existência do caminho final, se não existir, cria a pasta.
+
 if not os.path.exists(destino()):
     os.makedirs(destino())
+    print('Comission folder created')
 
 
 #verificando quais arquivos tem extensão xlsx e tem Relatorio de comissão no nome.
@@ -159,6 +166,7 @@ comissions_report = [
 for file in comissions_report:
     final_destiny = os.path.join(destino(), file)
     os.rename(origem+'/'+file, final_destiny)
+    print(f'File {file} moved successfully')
 
 
 os.chdir(destino())
@@ -178,6 +186,7 @@ def last_months(x):
 last_month = (last_months(1))
 last_3_months = last_months(3)
 
+print("Data Analysis in process...")
 for file in lista:
     df1 = pd.read_excel(file)
     # Accessing the wanted information
@@ -229,3 +238,4 @@ for file in lista:
     table1 = table1.sort_values(by='COMISSION')
     with pd.ExcelWriter(file, engine = 'openpyxl', mode = 'a', if_sheet_exists = 'replace') as writer:
         table1.to_excel(writer, sheet_name='DadosComissoes')
+        print(f'ETL process complete for {file}')
